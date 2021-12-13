@@ -30,7 +30,7 @@
 		String rez = "<font color='%s'>access %s</font>";
 		String color = "red";
 		String access="denied";
-		if(Objects.equals(login,"admin@gmail.com") && Objects.equals(password,"123456"))
+		if(Objects.equals(login,"admin@gmail.com") && Objects.equals(password,"Qwerty123"))
 			{
 				isShowForm = false;
 				access = "allowed";

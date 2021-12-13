@@ -31,7 +31,10 @@ errorText += "</ul>";
 boolean isError = false;
 
 String emailFormat = "^[-!#$%&'*+/0-9=?A-Z^_a-z{|}~](\\.?[-!#$%&'*+/0-9=?A-Z^_a-z{|}~])*@[a-zA-Z](-?[a-zA-Z0-9])*(\\.[a-zA-Z](-?[a-zA-Z0-9])*)+$";
-Pattern emailLogin = Pattern.compile(emailFormat);
+Pattern emailPattern = Pattern.compile(emailFormat);
+
+String passwordFormat = "^.*(?=.{8,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9]).*$";
+Pattern passwordPattern = Pattern.compile(passwordFormat);
 
 if(!Objects.isNull(login)) {
 	if(login.length()<1) {
@@ -39,7 +42,7 @@ if(!Objects.isNull(login)) {
 		errorText += "<li> login is empty </li>";
 	} 
 
-	if(!emailLogin.matcher(login).matches()) {
+	if(!emailPattern.matcher(login).matches()) {
 		isError = true;
 		errorText += "<li> email is incorrect </li>";		
 	}
@@ -49,12 +52,17 @@ if(!Objects.isNull(login)) {
 		errorText += "<li> password is empty </li>";
 	}
 
+	if(!passwordPattern.matcher(password).matches()) {
+		isError = true;
+		errorText += "<li> password is incorrect </li>";		
+	}
+
 	if(repassword.length()<1) {
 		isError = true;
 		errorText += "<li> repassword is empty </li>";
 	}
 
-	if(password != repassword) {
+	if(!Objects.equals(password,repassword)) {
 		isError = true;
 		errorText += "<li> password and repassword do not match </li>";
 	}
@@ -101,9 +109,9 @@ if(isShowForm) {
 <tr><td>name</td><td><input type='text' name='name' value='<%=login==null?"":name%>'/></td></tr>
 <tr><td>gender</td><td>M <input type='radio' name='gender' value='male' <%=(Objects.equals(gender,"male")?"checked":"")%>/> F <input type='radio' name='gender' value='female' <%=(Objects.equals(gender,"female")?"checked":"")%>/></td></tr>
 <tr><td>address</td><td><select name='address'>
-<option value='UA'>UA</option>
-<option value='FN'>FN</option>
-<option value='PL'>PL</option>
+<option value='UA' <%=(Objects.equals(address, "UA")?"selected":"")%>>UA</option>
+<option value='FN' <%=(Objects.equals(address, "FN")?"selected":"")%>>FN</option>
+<option value='PL' <%=(Objects.equals(address, "PL")?"selected":"")%>>PL</option>
 </select>
 </td></tr>
 <tr><td>comment</td><td><textarea rows='10' cols='25' name='comment' value='<%=login==null?"":comment%>'></textarea></td></tr>
@@ -119,6 +127,4 @@ out.write(errorText);
 <%
 }
 
-//out.write(result);
-//out.write("<br> attemps:" + number);
 %>
